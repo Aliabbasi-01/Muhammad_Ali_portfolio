@@ -203,7 +203,7 @@ const navItems = ["About", "Projects", "Skills", "Contact"];
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const heroImage = "/images/ali-portrait.png";
+  const heroImage = "/images/ali-original.jpg";
   const fallbackImage = "/images/ali-original.jpg";
 
   useEffect(() => {
