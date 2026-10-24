@@ -203,6 +203,8 @@ const navItems = ["About", "Projects", "Skills", "Contact"];
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const heroImage = "/images/ali-portrait.png";
+  const fallbackImage = "/images/ali-original.jpg";
 
   useEffect(() => {
     const elements = document.querySelectorAll<HTMLElement>("[data-reveal]");
@@ -355,10 +357,16 @@ export default function App() {
               <div className="portrait-float absolute inset-x-5 bottom-0 top-12 overflow-hidden rounded-[2.5rem] border border-[#e4bd57]/20 bg-[#121212] shadow-2xl shadow-black/40">
                 <img
                   alt="Ali, Software Engineer and mobile application developer"
-                  className="h-full w-full object-cover object-center"
+                  className="block h-full w-full object-cover object-center"
                   decoding="async"
                   fetchPriority="high"
-                  src="/images/ali-original.jpg"
+                  src={heroImage}
+                  onError={(event) => {
+                    const target = event.currentTarget;
+                    if (target.src !== `${window.location.origin}${fallbackImage}`) {
+                      target.src = fallbackImage;
+                    }
+                  }}
                 />
                 <div className="pointer-events-none absolute inset-0 rounded-[2.5rem] ring-1 ring-inset ring-white/8" />
               </div>
@@ -422,9 +430,15 @@ export default function App() {
                 <figure className="about-portrait group relative mt-10 max-w-md overflow-hidden rounded-2xl border border-white/10">
                   <img
                     alt="Ali in a professional portrait"
-                    className="aspect-[4/3] w-full object-cover object-[center_30%] transition-transform duration-700 group-hover:scale-[1.04]"
+                    className="block aspect-[4/3] w-full object-cover object-[center_30%] transition-transform duration-700 group-hover:scale-[1.04]"
                     loading="lazy"
-                    src="/images/ali-original.jpg"
+                    src={heroImage}
+                    onError={(event) => {
+                      const target = event.currentTarget;
+                      if (target.src !== `${window.location.origin}${fallbackImage}`) {
+                        target.src = fallbackImage;
+                      }
+                    }}
                   />
                   <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-[#090909]/95 to-transparent px-5 pb-5 pt-16">
                     <div>
