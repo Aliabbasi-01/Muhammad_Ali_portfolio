@@ -1,5 +1,9 @@
 import { FormEvent, ReactNode, useEffect, useState } from "react";
 
+// ---- Your links (change them here, and every button updates) ----
+const GITHUB_PROFILE = "https://github.com/Aliabbasi-01?tab=repositories";
+const GITHUB_HOME = "https://github.com/Aliabbasi-01";
+
 type IconName =
   | "arrow"
   | "code"
@@ -107,6 +111,10 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   );
 }
 
+// `github`: where the GitHub button goes.
+// `demo`: leave "" until you have a live demo. The Live Demo button is hidden when empty.
+// Later, replace GITHUB_PROFILE with a specific repo, e.g.
+// "https://github.com/Aliabbasi-01/service-car"
 const projects = [
   {
     number: "01",
@@ -114,6 +122,8 @@ const projects = [
     description:
       "A streamlined mobile experience for managing car service schedules, maintenance history, and timely reminders.",
     tags: ["Flutter", "Firebase", "REST API"],
+    github: GITHUB_PROFILE,
+    demo: "",
   },
   {
     number: "02",
@@ -121,6 +131,8 @@ const projects = [
     description:
       "Log daily spending, understand habits, and make better decisions with clear visual breakdowns.",
     tags: ["Kotlin", "Android", "Charts"],
+    github: GITHUB_PROFILE,
+    demo: "",
   },
   {
     number: "03",
@@ -128,6 +140,8 @@ const projects = [
     description:
       "Track sleep patterns over time with simple charts, practical insights, and a calm mobile interface.",
     tags: ["Flutter", "Dart", "SQLite"],
+    github: GITHUB_PROFILE,
+    demo: "",
   },
   {
     number: "04",
@@ -135,6 +149,8 @@ const projects = [
     description:
       "Create polished, professional resumes from flexible templates and export them as shareable PDFs.",
     tags: ["Flutter", "PDF", "Firebase"],
+    github: GITHUB_PROFILE,
+    demo: "",
   },
   {
     number: "05",
@@ -142,6 +158,8 @@ const projects = [
     description:
       "A fast reference library for useful secret and diagnostic codes across popular mobile devices.",
     tags: ["Kotlin", "Android", "Room DB"],
+    github: GITHUB_PROFILE,
+    demo: "",
   },
   {
     number: "06",
@@ -149,6 +167,8 @@ const projects = [
     description:
       "Build consistency with daily streaks, flexible routines, progress views, and encouraging reminders.",
     tags: ["Flutter", "Dart", "Notifications"],
+    github: GITHUB_PROFILE,
+    demo: "",
   },
   {
     number: "07",
@@ -156,6 +176,8 @@ const projects = [
     description:
       "Organise work and personal tasks using categories, priorities, due dates, and smart reminders.",
     tags: ["Kotlin", "Firebase", "MVVM"],
+    github: GITHUB_PROFILE,
+    demo: "",
   },
   {
     number: "08",
@@ -163,6 +185,8 @@ const projects = [
     description:
       "A fast, distraction-free notes app built around reliable offline access and instant search.",
     tags: ["Flutter", "SQLite", "Offline-first"],
+    github: GITHUB_PROFILE,
+    demo: "",
   },
 ];
 
@@ -530,12 +554,27 @@ export default function App() {
                       ))}
                     </div>
                     <div className="flex gap-5 border-t border-white/8 pt-5">
-                      <button className="project-link" type="button">
+                      {/* GitHub button: opens your GitHub in a new tab */}
+                      <a
+                        className="project-link"
+                        href={project.github}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
                         <Icon name="github" size={16} /> GitHub
-                      </button>
-                      <button className="project-link" type="button">
-                        <Icon name="external" size={15} /> Live Demo
-                      </button>
+                      </a>
+
+                      {/* Live Demo button: only shown when a demo URL is set */}
+                      {project.demo && (
+                        <a
+                          className="project-link"
+                          href={project.demo}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          <Icon name="external" size={15} /> Live Demo
+                        </a>
+                      )}
                     </div>
                   </div>
                 </article>
@@ -629,7 +668,7 @@ export default function App() {
                 <a
                   aria-label="GitHub"
                   className="social-link"
-                  href="https://github.com/"
+                  href={GITHUB_HOME}
                   rel="noreferrer"
                   target="_blank"
                 >
