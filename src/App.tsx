@@ -4,6 +4,10 @@ import { FormEvent, ReactNode, useEffect, useState } from "react";
 const GITHUB_PROFILE = "https://github.com/Aliabbasi-01?tab=repositories";
 const GITHUB_HOME = "https://github.com/Aliabbasi-01";
 
+// Get a free key at https://web3forms.com (enter muhammadalicodes4@gmail.com,
+// then the key arrives in your inbox) and paste it here.
+const WEB3FORMS_KEY = "529992b5-2c6b-4bbd-82e9-0b08b7a59dd9";
+
 type IconName =
   | "arrow"
   | "code"
@@ -227,6 +231,7 @@ const navItems = ["About", "Projects", "Skills", "Contact"];
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const heroImage = "/images/ali-original.jpg";
   const fallbackImage = "/images/ali-original.jpg";
 
@@ -257,14 +262,35 @@ export default function App() {
     return () => window.removeEventListener("scroll", updateProgress);
   }, []);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const subject = encodeURIComponent(`Portfolio enquiry from ${form.get("name")}`);
-    const body = encodeURIComponent(
-      `Name: ${form.get("name")}\nEmail: ${form.get("email")}\n\n${form.get("message")}`,
-    );
-    window.location.href = `mailto:muhammadalicodes4@gmail.com?subject=${subject}&body=${body}`;
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    setFormStatus("sending");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `Portfolio enquiry from ${form.get("name")}`,
+          name: form.get("name"),
+          email: form.get("email"),
+          message: form.get("message"),
+        }),
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        setFormStatus("success");
+        formElement.reset();
+      } else {
+        setFormStatus("error");
+      }
+    } catch {
+      setFormStatus("error");
+    }
   }
 
   return (
@@ -702,11 +728,25 @@ export default function App() {
                 />
               </label>
               <button
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#e4bd57] px-6 py-4 text-sm font-semibold text-[#171208] transition-colors hover:bg-[#c1ffcf]"
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#e4bd57] px-6 py-4 text-sm font-semibold text-[#171208] transition-colors hover:bg-[#c1ffcf] disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={formStatus === "sending"}
                 type="submit"
               >
-                Send Message <Icon name="arrow" size={17} />
+                {formStatus === "sending" ? "Sending..." : "Send Message"}
+                <Icon name="arrow" size={17} />
               </button>
+
+              {formStatus === "success" && (
+                <p className="mt-4 text-sm text-[#7ddc9a]" role="status">
+                  Thank you! Your message has been sent. I will reply soon.
+                </p>
+              )}
+              {formStatus === "error" && (
+                <p className="mt-4 text-sm text-[#ff8a80]" role="alert">
+                  Something went wrong. Please try again, or email me directly at
+                  muhammadalicodes4@gmail.com.
+                </p>
+              )}
             </form>
           </div>
         </section>
